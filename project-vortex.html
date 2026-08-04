@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project Vortex — Build. Innovate. Solve.</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --void: #050811;
+    --deep: #080f1e;
+    --panel: #0d1628;
+    --rim: #1a2540;
+    --muted: #2a3a5e;
+    --plasma: #4f7cff;
+    --arc: #7b5cff;
+    --spark: #00e5ff;
+    --flare: #ff4fcb;
+    --gold: #ffd166;
+    --text: #e8eeff;
+    --subdued: #7a8db0;
+    --ghost: #3a4d72;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── CANVAS ── */
+  #bg-canvas {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 4rem;
+    background: rgba(5,8,17,0.72);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(79,124,255,0.12);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--plasma); }
+
+  .nav-links {
+    display: flex; gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--subdued);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--plasma); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 7rem 2rem 4rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--spark);
+    margin-bottom: 1.8rem;
+    opacity: 0.85;
+  }
+
+  .hero-eyebrow::before { content: '// '; color: var(--ghost); }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.6rem, 9vw, 8.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 20%, #a0b8ff 55%, #7b5cff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--plasma);
+    margin-bottom: 2rem;
+  }
+
+  .hero-desc {
+    max-width: 620px;
+    font-size: 1.05rem;
+    color: var(--subdued);
+    line-height: 1.75;
+    margin-bottom: 3rem;
+  }
+
+  /* ── GLOW BUTTON ── */
+  .btn-glow {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 1rem 2.6rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    background: linear-gradient(135deg, rgba(79,124,255,0.18), rgba(123,92,255,0.22));
+    border: 1.5px solid rgba(79,124,255,0.45);
+    border-radius: 50px;
+    cursor: not-allowed;
+    animation: pulse-glow 2.8s ease-in-out infinite;
+    overflow: hidden;
+  }
+
+  .btn-glow::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(79,124,255,0.15), rgba(0,229,255,0.08));
+    border-radius: inherit;
+    animation: shimmer 3s linear infinite;
+    opacity: 0.6;
+  }
+
+  .btn-glow .dot {
+    width: 8px; height: 8px;
+    background: var(--spark);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--spark);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 18px rgba(79,124,255,0.35), 0 0 40px rgba(79,124,255,0.12); }
+    50% { box-shadow: 0 0 28px rgba(79,124,255,0.55), 0 0 70px rgba(123,92,255,0.22), 0 0 100px rgba(0,229,255,0.08); }
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero-footnote {
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--ghost);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-cue {
+    position: absolute; bottom: 2.5rem;
+    left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ghost);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .scroll-cue::after {
+    content: '';
+    display: block;
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--plasma), transparent);
+    animation: drop 1.8s ease-in-out infinite;
+  }
+
+  @keyframes drop {
+    0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+    100% { opacity: 0; transform: scaleY(1) translateY(12px); }
+  }
+
+  /* ── SECTION COMMONS ── */
+  section {
+    position: relative; z-index: 1;
+    padding: 6rem 2rem;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--plasma);
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--subdued);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--rim), transparent);
+    margin: 0;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--void); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 3.5rem;
+  }
+
+  .about-stat-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+  }
+
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 12px;
+    padding: 1.6rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--plasma), var(--arc));
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--subdued);
+    margin-top: 0.4rem;
+    letter-spacing: 0.04em;
+  }
+
+  .about-body p {
+    color: var(--subdued);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .about-body p:last-child { margin-bottom: 0; }
+
+  /* ── THEME ── */
+  #theme { background: var(--deep); }
+
+  .theme-card {
+    background: linear-gradient(135deg, rgba(79,124,255,0.06) 0%, rgba(123,92,255,0.06) 100%);
+    border: 1px solid rgba(79,124,255,0.18);
+    border-radius: 20px;
+    padding: 3.5rem;
+    margin-top: 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theme-card::before {
+    content: '';
+    position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(79,124,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .theme-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .theme-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .theme-desc {
+    color: var(--subdued);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  .theme-tags {
+    display: flex; flex-wrap: wrap; gap: 0.7rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .theme-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.4rem 1rem;
+    background: rgba(79,124,255,0.1);
+    border: 1px solid rgba(79,124,255,0.25);
+    border-radius: 20px;
+    color: var(--plasma);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── REGISTRATION TEASER ── */
+  #registration { background: var(--void); }
+
+  .reg-coming-card {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 20px;
+    padding: 4rem 3.5rem;
+    text-align: center;
+    max-width: 720px;
+    margin: 3.5rem auto 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .reg-coming-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(79,124,255,0.04), rgba(0,229,255,0.04), rgba(123,92,255,0.04));
+    pointer-events: none;
+  }
+
+  .reg-coming-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--plasma), var(--spark), var(--arc));
+  }
+
+  .reg-icon {
+    font-size: 3rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .reg-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .reg-body {
+    color: var(--subdued);
+    line-height: 1.75;
+    margin-bottom: 2.2rem;
+  }
+
+  .reg-footnote {
+    font-size: 0.8rem;
+    color: var(--ghost);
+    line-height: 1.6;
+    margin-top: 1.4rem;
+  }
+
+  /* ── RULES ── */
+  #rules { background: var(--deep); }
+
+  .rules-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .rule-card {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 14px;
+    padding: 1.8rem;
+  }
+
+  .rule-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--plasma);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
+  }
+
+  .rule-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .rule-body {
+    font-size: 0.9rem;
+    color: var(--subdued);
+    line-height: 1.65;
+  }
+
+  /* ── AWARDS ── */
+  #awards { background: var(--void); }
+
+  .awards-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .award-card {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+
+  .award-card:hover { transform: translateY(-4px); }
+
+  .award-card.gold { border-color: rgba(255,209,102,0.3); }
+  .award-card.gold::after { background: var(--gold); }
+  .award-card.silver { border-color: rgba(192,192,200,0.3); }
+  .award-card.silver::after { background: #c0c0c8; }
+  .award-card.bronze { border-color: rgba(205,127,50,0.3); }
+  .award-card.bronze::after { background: #cd7f32; }
+
+  .award-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .award-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+
+  .award-place {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .award-prize {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--subdued);
+  }
+
+  /* ── JUDGING ── */
+  #judging { background: var(--deep); }
+
+  .judging-list {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-top: 3rem;
+  }
+
+  .judge-criterion {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 12px;
+    padding: 1.5rem 1.6rem;
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+
+  .judge-bar {
+    width: 4px; min-width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--plasma), var(--arc));
+    border-radius: 2px;
+    align-self: stretch;
+  }
+
+  .judge-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .judge-desc {
+    font-size: 0.85rem;
+    color: var(--subdued);
+    line-height: 1.6;
+  }
+
+  .judge-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--plasma);
+    margin-top: 0.4rem;
+  }
+
+  /* ── FAQ ── */
+  #faq { background: var(--void); }
+
+  .faq-list {
+    margin-top: 3rem;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+
+  .faq-item {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .faq-q {
+    padding: 1.3rem 1.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+  }
+
+  .faq-q:hover { color: var(--plasma); }
+
+  .faq-icon {
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--rim);
+    border-radius: 50%;
+    font-size: 1rem;
+    flex-shrink: 0;
+    color: var(--subdued);
+    transition: transform 0.25s;
+  }
+
+  .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--plasma); }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.25s;
+    padding: 0 1.8rem;
+    color: var(--subdued);
+    font-size: 0.93rem;
+    line-height: 1.7;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 200px;
+    padding: 0 1.8rem 1.4rem;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--deep); }
+
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .contact-card {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .contact-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+
+  .contact-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-val {
+    font-size: 0.87rem;
+    color: var(--ghost);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .contact-note {
+    text-align: center;
+    color: var(--ghost);
+    font-size: 0.82rem;
+    margin-top: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    background: var(--void);
+    border-top: 1px solid var(--rim);
+    padding: 3.5rem 2rem 2.5rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, #a0b8ff, #7b5cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--subdued);
+    letter-spacing: 0.12em;
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-status {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.35rem 1rem;
+    background: rgba(79,124,255,0.1);
+    border: 1px solid rgba(79,124,255,0.2);
+    border-radius: 20px;
+    color: var(--spark);
+    letter-spacing: 0.12em;
+    margin-bottom: 1.8rem;
+    animation: pulse-glow 2.8s ease-in-out infinite;
+  }
+
+  .footer-copy {
+    font-size: 0.78rem;
+    color: var(--ghost);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .awards-grid { grid-template-columns: 1fr; }
+    .judging-list { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .reg-coming-card { padding: 2.5rem 1.8rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-glow, .footer-status { animation: none; }
+    * { animation-duration: 0.01ms !important; }
+  }
+
+  /* ── REVEAL ANIMATION ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">Project <span>Vortex</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#theme">Theme</a></li>
+    <li><a href="#registration">Register</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#awards">Awards</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">Inter-school Hackathon</p>
+  <h1 class="hero-title">Project Vortex</h1>
+  <p class="hero-sub">Build. Innovate. Solve.</p>
+  <p class="hero-desc">Project Vortex is an inter-school website innovation hackathon where students create websites that solve real-world problems through technology, creativity, and innovation.</p>
+
+  <button class="btn-glow" disabled aria-disabled="true">
+    <span class="dot"></span>
+    Coming Soon
+  </button>
+
+  <p class="hero-footnote">Registration, event details, and announcements will be revealed soon.</p>
+
+  <div class="scroll-cue">Scroll</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <span class="section-tag">// About</span>
+    <h2 class="section-title">What is Project Vortex?</h2>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>Project Vortex is a high-energy hackathon designed to challenge students from schools across the region to build websites that address genuine, pressing real-world problems.</p>
+        <p>Teams collaborate, prototype, and present functional websites — pushing the limits of what's possible when creative thinking meets technical execution.</p>
+        <p>This isn't about templates. It's about building something that matters.</p>
+      </div>
+      <div class="about-stat-grid">
+        <div class="stat-card reveal">
+          <div class="stat-num">TBA</div>
+          <div class="stat-label">Participating Schools</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-num">TBA</div>
+          <div class="stat-label">Team Size</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-num">TBA</div>
+          <div class="stat-label">Competition Duration</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-num">TBA</div>
+          <div class="stat-label">Total Prize Pool</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THEME -->
+<section id="theme">
+  <div class="container">
+    <span class="section-tag">// Theme</span>
+    <h2 class="section-title">This Year's Focus</h2>
+    <p class="section-sub">Every submission must address a real challenge in the world. Innovation is great — impact is the goal.</p>
+    <div class="theme-card reveal">
+      <span class="theme-icon">🌍</span>
+      <div class="theme-name">Technology for a Better Tomorrow</div>
+      <p class="theme-desc">Build a website or web application that tackles a real-world problem in your community, your school, or the world at large. Projects will be judged on originality, social impact, and technical execution.</p>
+      <div class="theme-tags">
+        <span class="theme-tag">Education</span>
+        <span class="theme-tag">Environment</span>
+        <span class="theme-tag">Healthcare</span>
+        <span class="theme-tag">Community</span>
+        <span class="theme-tag">Accessibility</span>
+        <span class="theme-tag">Sustainability</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REGISTRATION TEASER -->
+<section id="registration">
+  <div class="container">
+    <span class="section-tag">// Registration</span>
+    <h2 class="section-title">Join the Hackathon</h2>
+    <p class="section-sub">Registration is not yet open — but something exciting is coming. Watch this space.</p>
+
+    <div class="reg-coming-card reveal">
+      <span class="reg-icon">🚀</span>
+      <div class="reg-title">Registration Opening Soon</div>
+      <p class="reg-body">
+        Project Vortex registrations are not yet open.<br />
+        Stay tuned as we prepare an exciting inter-school hackathon experience.
+      </p>
+      <button class="btn-glow" disabled aria-disabled="true">
+        <span class="dot"></span>
+        Registration Coming Soon
+      </button>
+      <p class="reg-footnote">
+        Registration dates, venue, submission guidelines, and additional announcements<br />
+        will be published in a future update.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="container">
+    <span class="section-tag">// Rules</span>
+    <h2 class="section-title">Competition Rules</h2>
+    <p class="section-sub">All participants are expected to compete with integrity and follow these guidelines.</p>
+    <div class="rules-grid">
+      <div class="rule-card reveal">
+        <div class="rule-num">RULE 01</div>
+        <div class="rule-title">Eligible Participants</div>
+        <p class="rule-body">Participants must be currently enrolled students at a registered participating school. Each team must have a faculty supervisor.</p>
+      </div>
+      <div class="rule-card reveal">
+        <div class="rule-num">RULE 02</div>
+        <div class="rule-title">Original Work Only</div>
+        <p class="rule-body">All code, design, and content must be created during the competition window. Pre-existing projects are not permitted.</p>
+      </div>
+      <div class="rule-card reveal">
+        <div class="rule-num">RULE 03</div>
+        <div class="rule-title">Team Composition</div>
+        <p class="rule-body">Teams must consist of students from the same school. Cross-school collaboration is not permitted in the main competition track.</p>
+      </div>
+      <div class="rule-card reveal">
+        <div class="rule-num">RULE 04</div>
+        <div class="rule-title">Submission Format</div>
+        <p class="rule-body">Each team must submit a live, functional website along with a brief presentation explaining the problem it solves and the approach taken.</p>
+      </div>
+      <div class="rule-card reveal">
+        <div class="rule-num">RULE 05</div>
+        <div class="rule-title">Content Standards</div>
+        <p class="rule-body">All submitted websites must be appropriate for school audiences. Projects with offensive or inappropriate content will be disqualified.</p>
+      </div>
+      <div class="rule-card reveal">
+        <div class="rule-num">RULE 06</div>
+        <div class="rule-title">Fair Play</div>
+        <p class="rule-body">Use of AI tools must be declared. Judges will assess the depth of student contribution. Academic integrity is non-negotiable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AWARDS -->
+<section id="awards">
+  <div class="container">
+    <span class="section-tag">// Awards</span>
+    <h2 class="section-title">Prizes & Recognition</h2>
+    <p class="section-sub">Winners will be recognized across multiple categories. Details to be announced.</p>
+    <div class="awards-grid">
+      <div class="award-card silver reveal">
+        <span class="award-icon">🥈</span>
+        <div class="award-place">Second Place</div>
+        <div class="award-prize">To Be Announced</div>
+      </div>
+      <div class="award-card gold reveal">
+        <span class="award-icon">🏆</span>
+        <div class="award-place">First Place</div>
+        <div class="award-prize">To Be Announced</div>
+      </div>
+      <div class="award-card bronze reveal">
+        <span class="award-icon">🥉</span>
+        <div class="award-place">Third Place</div>
+        <div class="award-prize">To Be Announced</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- JUDGING -->
+<section id="judging">
+  <div class="container">
+    <span class="section-tag">// Judging Criteria</span>
+    <h2 class="section-title">How Projects are Evaluated</h2>
+    <p class="section-sub">Our panel of judges will assess submissions across these key dimensions.</p>
+    <div class="judging-list">
+      <div class="judge-criterion reveal">
+        <div class="judge-bar"></div>
+        <div>
+          <div class="judge-name">Problem Relevance</div>
+          <p class="judge-desc">Does the website address a genuine, meaningful real-world problem? Is the target audience clearly defined?</p>
+          <div class="judge-pct">Weightage: TBA</div>
+        </div>
+      </div>
+      <div class="judge-criterion reveal">
+        <div class="judge-bar"></div>
+        <div>
+          <div class="judge-name">Technical Execution</div>
+          <p class="judge-desc">Is the website functional, responsive, and well-built? Code quality, performance, and reliability matter.</p>
+          <div class="judge-pct">Weightage: TBA</div>
+        </div>
+      </div>
+      <div class="judge-criterion reveal">
+        <div class="judge-bar"></div>
+        <div>
+          <div class="judge-name">Design & UX</div>
+          <p class="judge-desc">Is the website intuitive and visually compelling? Does the design serve the user's needs effectively?</p>
+          <div class="judge-pct">Weightage: TBA</div>
+        </div>
+      </div>
+      <div class="judge-criterion reveal">
+        <div class="judge-bar"></div>
+        <div>
+          <div class="judge-name">Originality</div>
+          <p class="judge-desc">Is the concept creative and distinct? Novel approaches to known problems will be recognized and rewarded.</p>
+          <div class="judge-pct">Weightage: TBA</div>
+        </div>
+      </div>
+      <div class="judge-criterion reveal">
+        <div class="judge-bar"></div>
+        <div>
+          <div class="judge-name">Social Impact</div>
+          <p class="judge-desc">What real-world difference could this project make? Judges will assess the depth and scalability of impact.</p>
+          <div class="judge-pct">Weightage: TBA</div>
+        </div>
+      </div>
+      <div class="judge-criterion reveal">
+        <div class="judge-bar"></div>
+        <div>
+          <div class="judge-name">Presentation</div>
+          <p class="judge-desc">Can the team clearly explain their idea and demonstrate their solution? Communication is a core skill.</p>
+          <div class="judge-pct">Weightage: TBA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <span class="section-tag">// FAQ</span>
+    <h2 class="section-title">Common Questions</h2>
+    <p class="section-sub">We'll add more answers as details are confirmed. Can't find what you need? Check back soon.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Who can participate in Project Vortex? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Project Vortex is open to school students across participating institutions. Specific eligibility criteria and grade requirements will be published when registration opens.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How many students can be in a team? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Team size details will be announced soon. We're designing the competition to be fair and collaborative. Stay tuned for the official guidelines.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What technologies can we use? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Teams are free to use any web technologies they're comfortable with — HTML, CSS, JavaScript, frameworks, and more. The final submission must be a functional, accessible website.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do we need prior coding experience? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Project Vortex is designed to be accessible. While some technical knowledge is helpful, we welcome teams with diverse skill sets — great ideas and strong design count for a lot.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">When and where will the event take place? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Event details including venue and dates will be announced soon. Please check this page regularly for updates.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is there a registration fee? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Registration fee details will be shared when registration opens. More information is coming soon.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <span class="section-tag">// Contact</span>
+    <h2 class="section-title">Get in Touch</h2>
+    <p class="section-sub">Full contact details will be published when the event is officially announced.</p>
+
+    <div class="contact-grid">
+      <div class="contact-card reveal">
+        <span class="contact-icon">📅</span>
+        <div class="contact-label">Event Dates</div>
+        <p class="contact-val">Event details will be announced soon.</p>
+      </div>
+      <div class="contact-card reveal">
+        <span class="contact-icon">📍</span>
+        <div class="contact-label">Venue</div>
+        <p class="contact-val">Registration will open soon.</p>
+      </div>
+      <div class="contact-card reveal">
+        <span class="contact-icon">📬</span>
+        <div class="contact-label">Contact</div>
+        <p class="contact-val">More information coming soon.</p>
+      </div>
+    </div>
+
+    <p class="contact-note">// All event information will be officially released in a future announcement.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Project Vortex</div>
+  <div class="footer-tagline">Build. Innovate. Solve.</div>
+  <div class="footer-status">● Coming Soon</div>
+  <p class="footer-copy">Copyright © Project Vortex</p>
+</footer>
+
+<script>
+  /* ── PARTICLE CANVAS ── */
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+
+  let W, H, particles = [], codeSymbols = [], mouse = { x: -999, y: -999 };
+
+  const SYMBOLS = ['{ }', '//', '=>', '< >', '[ ]', '&&', '01', '10', '</', '/>'];
+  const COLORS  = ['rgba(79,124,255,', 'rgba(123,92,255,', 'rgba(0,229,255,', 'rgba(255,79,203,'];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initParticles() {
+    particles = Array.from({ length: 70 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.4,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      opacity: Math.random() * 0.5 + 0.1,
+    }));
+
+    codeSymbols = Array.from({ length: 22 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      sym: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: -Math.random() * 0.25 - 0.05,
+      opacity: Math.random() * 0.12 + 0.04,
+      size: Math.random() * 8 + 9,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    /* gradient bg wash */
+    const grd = ctx.createRadialGradient(W * 0.5, H * 0.3, 0, W * 0.5, H * 0.3, H * 0.75);
+    grd.addColorStop(0, 'rgba(30,50,100,0.08)');
+    grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+
+    /* particles */
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.opacity + ')';
+      ctx.fill();
+    });
+
+    /* connections */
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(79,124,255,${0.08 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    /* floating code symbols */
+    codeSymbols.forEach(s => {
+      s.x += s.vx; s.y += s.vy;
+      if (s.y < -30) { s.y = H + 10; s.x = Math.random() * W; }
+      if (s.x < -50) s.x = W + 20;
+      if (s.x > W + 50) s.x = -20;
+
+      ctx.font = `${s.size}px 'JetBrains Mono', monospace`;
+      ctx.fillStyle = s.color + s.opacity + ')';
+      ctx.fillText(s.sym, s.x, s.y);
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+  resize(); initParticles(); draw();
+
+  /* ── REVEAL ON SCROLL ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ── FAQ ACCORDION ── */
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>
